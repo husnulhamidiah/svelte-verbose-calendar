@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Open Sans', sans-serif !important;
+  background-image: linear-gradient(#e2e8f0 1px, transparent 0), linear-gradient(90deg, #e2e8f0 1px, transparent 0);
+  background-size: 50px 50px;
+}
