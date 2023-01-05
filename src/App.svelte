@@ -7,23 +7,17 @@
 
   const now = new Date()
   const year = writable(now.getFullYear())
-  const generateMonths = (year) => {
-    return [...Array(12).keys()]
-      .map(month => {
-        now.setMonth(month)
-        return now.toLocaleString(undefined, { month: 'long' })
-      })
-      .map((month, index) => {
-        return {
-          name: month,
-          days: new Date(year, index + 1, 0).getDate()
-        }
-      })
-  }
+
+  const getMonts = (year) => [...Array(12).keys()]
+    .map(key => new Date(0, key).toLocaleString('en', { month: 'long' }))
+    .map((month, index) => ({
+      name: month,
+      days: new Date(year, index + 1, 0).getDate()
+    }))
 
   $: data = {
     year: $year, 
-    months: generateMonths($year)
+    months: getMonts($year)
   }
 
   const previousYearHandle = () => year.update(y => y - 1)
@@ -34,6 +28,10 @@
 </script>
 
 <main>
+  <div class="gallery">
+    <a href="images/image1.jpg"><img src="images/thumbs/thumb1.jpg" alt="" title=""/></a>
+    <a href="images/image2.jpg"><img src="images/thumbs/thumb2.jpg" alt="" title="Beautiful Image"/></a>
+  </div>
   <div class="flex flex-col">
     <div class="flex flex-row">
       <div class="flex flex-row">
@@ -56,7 +54,7 @@
         </div>
         <div in:fade="{{delay: (250 + i * 100), duration: 100}}" out:fade="{{duration: 50}}" class="flex flex-row flex-wrap">
           {#each {length: month.days} as _, j}
-            <div class="w-[50px] h-[50px] border border-slate-200 border-solid flex justify-center items-center hover:bg-stone-300" class:bg-cyan-200="{ data.year == now.getFullYear() && i == now.getMonth() - 1 && j == now.getDate() - 1 }" data-tippy-content="{ new Date(data.year, i, j + 1).toLocaleString(undefined, {weekday: 'long'}) }" on:click={dateHandle} on:keyup={dateHandle} data-day="{ j + 1 }">{ j + 1 }</div>
+            <div class="w-[50px] h-[50px] border border-slate-200 border-solid flex justify-center items-center hover:bg-stone-300" class:bg-cyan-200="{ data.year == now.getFullYear() && i == now.getMonth() && j == now.getDate() - 1 }" data-tippy-content="{ new Date(data.year, i, j + 1).toLocaleString(undefined, {weekday: 'long'}) }" on:click={dateHandle} on:keyup={dateHandle} data-day="{ j + 1 }">{ j + 1 }</div>
           {/each}
         </div>
       {/each}
